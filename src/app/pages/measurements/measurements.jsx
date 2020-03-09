@@ -22,7 +22,7 @@ class Measurements extends Component {
   render() {
     return (
       <>
-        <div className='card'>
+        <div className='card measurements'>
           <div className='card-body'>
             <Switch checkedChildren='Decimal' unCheckedChildren='Ingles' />
             <br />

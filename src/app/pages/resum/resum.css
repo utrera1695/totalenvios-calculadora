@@ -1,0 +1,13 @@
+.resum_title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.resum_title img {
+    margin-bottom: 15px;
+}
+.resum_title label {
+    text-transform: uppercase;
+    font-size: 10px;
+}
