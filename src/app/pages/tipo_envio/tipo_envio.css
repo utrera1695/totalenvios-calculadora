@@ -1,0 +1,30 @@
+.option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 20px 30px;
+}
+
+.title {
+  text-align: center;
+  margin: 30px;
+  color: gray;
+  text-transform: uppercase;
+}
+
+.option img {
+  width: 100%;
+}
+
+.option label {
+  margin: 10px;
+  font-family: 'Eina Bold';
+  font-size: 20px;
+}
+
+
+
+.tipo_envio .card:hover {
+  box-shadow: 0 0 20px 0px #adadad;
+  transform: scale(1.03);
+}

@@ -1,0 +1,114 @@
+@import '~antd/dist/antd.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+
+/* 
+#fc3c3d     el rojito
+#004e69    el azul verdoso
+*/
+@font-face {
+  font-family: 'Eina Bold';
+  src: url('./assets/fonts/Eina02-Bold.ttf');
+}
+
+@font-face {
+  font-family: 'Eina Regular';
+  src: url('./assets/fonts/Eina02-Regular.ttf');
+}
+
+@font-face {
+  font-family: 'Eina Light';
+  src: url('./assets/fonts/Eina02-Light.ttf');
+}
+
+@font-face {
+  font-family: 'Eina SemiBold';
+  src: url('./assets/fonts/Eina02-SemiBold.ttf');
+}
+
+body,
+html {
+  height: 100%;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Eina SemiBold';
+}
+
+.App {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.form-group label {
+  font-family: 'Eina SemiBold';
+}
+
+.logo {
+  width: 10%;
+  position: absolute;
+  bottom: 4%;
+}
+
+.fondo {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  opacity: 40%;
+}
+
+.steps_content {
+  position: absolute;
+  top: 40px;
+  left: 0;
+  right: 0;
+}
+
+.card {
+  border: none !important;
+  border-radius: 0.35rem;
+  box-shadow: 0 0 20px 0px #dadada;
+  cursor: pointer;
+  transition: all ease-in 0.2s;
+}
+
+.ant-switch-checked {
+  background-color: #004e69 !important;
+}
+
+.ant-switch {
+  background-color: #fc3c3d;
+  width: 100px;
+  position: absolute;
+  right: 20px;
+  font-family: 'Eina Regular';
+}
+
+.ant-switch-checked .ant-switch-inner {
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.ant-input {
+  background: #e6e6e6 !important;
+  border: none !important;
+  font-family: 'Eina Light';
+}
+
+.ant-select-selection__placeholder,
+.ant-select-search__field__placeholder {
+  /* color: #004e69 !important; */
+  font-family: 'Eina Light';
+}
+
+.ant-btn-primary {
+  background-color: #004e69 !important;
+  border: none !important;
+  font-family: 'Eina SemiBold';
+}

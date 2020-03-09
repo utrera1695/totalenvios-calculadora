@@ -1,0 +1,8 @@
+.select_destino .ant-select-selection {
+  background-color: transparent !important;
+  color: white !important;
+}
+
+.select_destino .ant-select-selection .ant-select-arrow {
+  color: white
+}
