@@ -1,5 +1,6 @@
 @import '~antd/dist/antd.css';
 @import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~@fortawesome/fontawesome-free/css/all.min.css';
 
 /* 
 #fc3c3d     el rojito
@@ -49,9 +50,11 @@ h6 {
 .form-group label {
   font-family: 'Eina SemiBold';
 }
+
 .label_switch {
   font-family: 'Eina Light' !important;
 }
+
 .logo {
   width: 10%;
   position: absolute;
@@ -91,6 +94,7 @@ h6 {
   right: 20px;
   font-family: 'Eina Regular';
 }
+
 .optional .ant-switch {
   position: absolute;
   right: 20px;
@@ -103,9 +107,9 @@ h6 {
 }
 
 .ant-input {
-  background: #e6e6e6 !important;
+  background: #f1f1f1 !important;
   border: none !important;
-  font-family: 'Eina Light';
+  font-family: 'Eina SemiBold';
 }
 
 .ant-select-selection__placeholder,
@@ -114,23 +118,32 @@ h6 {
   font-family: 'Eina Light';
 }
 
+.ant-input::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: rgb(170, 170, 170);
+  /* Firefox */
+}
+
 .ant-btn-primary {
-  background-color: #004e69 !important;
+  background-color: #004e69;
   border: none !important;
   font-family: 'Eina SemiBold';
 }
+
 table {
   font-size: 12px;
 }
+
 table td:first-child {
   font-family: 'Eina Regular' !important;
 }
+
 table td {
   font-family: 'Eina Light';
   padding: 6px 0 !important;
   text-align: center;
-    width: 90px;
-    border-bottom: 1px solid #dee2e64a !important;
+  width: 90px;
+  border-bottom: 1px solid #dee2e64a !important;
 }
 
 .user_desc label {
@@ -142,5 +155,130 @@ table td {
 .user_desc p {
   font-family: 'Eina Regular';
   font-size: 12px;
-  margin-bottom: 1px
+  margin-bottom: 1px;
+}
+
+.btns_next_prev {
+  bottom: 100px;
+  margin: 0 auto;
+  margin-top: 20px;
+  left: 0;
+  right: 0;
+  justify-content: center;
+  align-items: center;
+}
+
+.btns_next_prev div {
+  cursor: pointer;
+  text-align: center;
+  width: 165px;
+  margin: 0 10px;
+  font-family: 'Eina SemiBold';
+}
+
+.btns_next_prev .ant-btn {
+  cursor: pointer;
+  text-align: center;
+  width: 165px;
+  margin: 0 10px;
+  font-family: 'Eina SemiBold';
+}
+
+.ant-switch {
+  min-width: 80px !important;
+}
+
+.shared {
+  background: transparent !important;
+  border: 2px solid white !important;
+  color: white !important;
+  width: 60%;
+  margin: 20px auto;
+  margin-top: 20px;
+}
+
+.shared i {
+  margin-right: 10px;
+}
+
+.shared:hover {
+  box-shadow: 0 0 20px 0px #420000ad;
+}
+
+.form-group.select_destino {
+  margin-bottom: 0;
+}
+
+@media (max-width: 575.98px) {
+  .btns_next_prev {
+    position: static;
+  }
+
+  .btns_next_prev div {
+    cursor: pointer;
+    text-align: center;
+    width: 100px;
+    margin: 0 10px;
+    font-family: 'Eina SemiBold';
+  }
+
+  .btns_next_prev .ant-btn {
+    cursor: pointer;
+    text-align: center;
+    width: 100px;
+    margin: 0 10px;
+    font-family: 'Eina SemiBold';
+  }
+
+  .btns_next_prev {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  #steps {
+    display: none;
+  }
+
+  .App {
+    justify-content: start;
+  }
+
+  .shared {
+    width: 50%;
+  }
+}
+
+@media (min-width: 576px) and (max-width: 767.98px) {
+  .btns_next_prev {
+    position: static;
+  }
+
+  .btns_next_prev div {
+    cursor: pointer;
+    text-align: center;
+    width: 100px;
+    margin: 0 10px;
+    font-family: 'Eina SemiBold';
+  }
+
+  .btns_next_prev .ant-btn {
+    cursor: pointer;
+    text-align: center;
+    width: 100px;
+    margin: 0 10px;
+    font-family: 'Eina SemiBold';
+  }
+
+  .btns_next_prev {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+
+  #steps {
+    display: none;
+  }
+
+  .App {
+    justify-content: start;
+  }
 }

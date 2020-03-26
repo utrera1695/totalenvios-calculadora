@@ -15,16 +15,12 @@ class StepsComponent extends Component {
   render() {
     return (
       <>
-        <div className='container steps_content' style={{ paddingTop: '20px' }}>
-          <Steps
-            current={this.props.page}
-            progressDot
-            onChange={this.props.changePage}
-          >
-            <Step title='Tipo de envio' />
-            <Step title='Datos del envio' />
-            <Step title='Opciones del envio' />
-            <Step title='Done' />
+        <div className='container steps_content'>
+          <Steps current={this.props.page} progressDot>
+            <Step title='Tipo de envío' />
+            <Step title='Datos del envío' />
+            <Step title='Opciones del envío' />
+            <Step title='Calculo estimado' />
           </Steps>
         </div>
       </>

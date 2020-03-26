@@ -1,0 +1,84 @@
+.result table {
+  width: 100%;
+  margin-bottom: 0;
+  color: #212529;
+  background-color: #eaeaea;
+
+  border-top-left-radius: 0.35rem;
+  border-top-right-radius: 0.35rem;
+}
+
+.result table td {
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+.result table .totalmonto {
+  background-color: #d0d0d0;
+  font-family: 'Eina SemiBold' !important;
+}
+
+.result table .totalmonto td {
+  background-color: #d0d0d0;
+  font-family: 'Eina SemiBold' !important;
+}
+
+.result table tr td {
+  text-align: end;
+  padding-right: 10px !important;
+}
+
+.result table tr td:first-child {
+  text-align: start;
+  padding-left: 10px !important;
+}
+
+.totalpay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.totalpay label {
+  color: gray;
+  text-transform: uppercase;
+  font-size: 12px;
+  font-family: 'Eina SemiBold';
+}
+
+.totalpay h3 {
+  font-family: 'Eina Bold' !important;
+}
+
+.totalpay p {
+  color: gray;
+  font-size: 12px;
+  font-family: 'Eina Regular' !important;
+}
+
+.result table .metodopago {
+  background-color: white;
+}
+
+.result table .metodopago td label {
+  margin: 0;
+  color: gray;
+  font-family: 'Eina SemiBold' !important;
+}
+
+.result table .metodopago td p {
+  margin: 0;
+  font-family: 'Eina SemiBold' !important;
+}
+
+.result table .metodopago td {
+  margin: 0;
+  color: black;
+  font-family: 'Eina SemiBold' !important;
+}
+
+.result table td,
+.table th {
+  padding: .75rem;
+  vertical-align: bottom;
+}
