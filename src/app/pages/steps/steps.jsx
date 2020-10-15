@@ -20,7 +20,7 @@ class StepsComponent extends Component {
             <Step title='Tipo de envío' />
             <Step title='Datos del envío' />
             <Step title='Opciones del envío' />
-            <Step title='Calculo estimado' />
+            <Step title='Cálculo estimado' />
           </Steps>
         </div>
       </>

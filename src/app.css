@@ -69,8 +69,7 @@ h6 {
 }
 
 .steps_content {
-  position: absolute;
-  top: 40px;
+  margin-bottom: 20px;
   left: 0;
   right: 0;
 }

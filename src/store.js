@@ -28,7 +28,9 @@ const initialState = {
     email: '',
     empresa: '',
     precio_producto: 0,
-    colombiaImpuesto: null
+    colombiaImpuesto: null,
+    producto: null,
+    min: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -74,6 +76,12 @@ const reducer = (state = initialState, action) => {
             return ({
                 ...state,
                 seguro_status: action.seguro_status
+            })
+        }
+        case 'SET_MIN': {
+            return ({
+                ...state,
+                min: action.min
             })
         }
         case 'SET_OTROS_CARGOS': {
@@ -137,7 +145,8 @@ const reducer = (state = initialState, action) => {
                 ancho: action.ancho,
                 alto: action.alto,
                 largo: action.largo,
-                peso: action.peso
+                peso: action.peso,
+                producto: action.producto
             })
         }
         default:

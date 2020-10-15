@@ -12,7 +12,10 @@ class PriceResult extends Component {
       total: 0,
       totalmonto: 0,
       subtotal: 0,
-      pesovolumetrico: 0
+      pesovolumetrico: 0,
+      piescubicos: 0,
+      ismin: false,
+      totalnormal: 0,
     };
   }
   componentDidMount() {
@@ -24,7 +27,7 @@ class PriceResult extends Component {
   }
   calcularPesoVolumetrico(ancho, alto, largo, sistema) {
     if (!sistema) {
-      /* ingles */
+      /* ingles in3/lb */
       console.log(ancho, alto, largo);
       return (ancho * alto * largo) / 166;
     } else {
@@ -37,11 +40,11 @@ class PriceResult extends Component {
   }
   calcularPiesCubicos(ancho, alto, largo, sistema) {
     if (!sistema) {
-      /* ingles */
+      /* ingles pie3*/
       console.log(ancho, alto, largo);
       return (ancho * alto * largo) / 1728;
     } else {
-      /* decimal */
+      /* decimal cm3*/
       console.log(ancho, alto, largo);
       return (ancho * alto * largo) / 28316.85;
     }
@@ -53,6 +56,44 @@ class PriceResult extends Component {
       return origen === '1' ? ciudad.tarifaOcean1 : ciudad.tarifaOcean2;
     }
   }
+  getMinTarifa(ciudad, tipoenvio) {
+    if (tipoenvio === 1) {
+      /* AEREO */
+      let min = this.props.min.filter((a) => a.type === 1);
+      return ciudad.nombreRegion === 'Centro'
+        ? min[0].tarifamin1
+        : min[0].tarifamin2;
+    } else {
+      /* MARITIMO */
+      let min = this.props.min.filter((a) => a.type === 2);
+      return ciudad.nombreRegion === 'Centro'
+        ? min[0].tarifamin1
+        : min[0].tarifamin2;
+    }
+  }
+  getIsMin(sistema, tipoenvio, medida) {
+    if (tipoenvio === 1) {
+      /* AEREO */
+      let min = this.props.min.filter((a) => a.type === 1);
+      if (!sistema) {
+        /* ingles */
+        return medida <= min[0].lbmin;
+      } else {
+        /* decimal */
+        return medida <= min[0].lbmin / 2.205;
+      }
+    } else {
+      /* MARITIMO */
+      let min = this.props.min.filter((a) => a.type === 2);
+      if (!sistema) {
+        /* ingles */
+        return medida <= min[0].lbmin;
+      } else {
+        /* decimal */
+        return medida <= min[0].lbmin * 28317;
+      }
+    }
+  }
   calcularcosto() {
     var total = 0;
     var tarifa = this.getTarifa(
@@ -62,7 +103,7 @@ class PriceResult extends Component {
     );
     var subtotal = 0;
     var totalmonto = 0;
-
+    /* si el envio es aereo */
     if (this.props.tipoenvio === 1) {
       let pesoVolumetrico = this.calcularPesoVolumetrico(
         parseFloat(this.props.ancho),
@@ -70,22 +111,47 @@ class PriceResult extends Component {
         parseFloat(this.props.largo),
         this.props.sistema
       );
-      total =
+      let totalnormal =
         pesoVolumetrico > parseFloat(this.props.peso)
           ? Math.round(pesoVolumetrico.toFixed(2)) * tarifa
           : Math.round(parseFloat(this.props.peso).toFixed(2)) * tarifa;
+
+      total =
+        this.getIsMin(
+          this.props.sistema,
+          this.props.tipoenvio,
+          pesoVolumetrico > parseFloat(this.props.peso)
+            ? pesoVolumetrico
+            : parseFloat(this.props.peso)
+        ) && this.props.nombrePais === 'Venezuela'
+          ? this.getMinTarifa(this.props.ciudadSelect, this.props.tipoenvio)
+          : pesoVolumetrico > parseFloat(this.props.peso)
+          ? Math.round(pesoVolumetrico.toFixed(2)) * tarifa
+          : Math.round(parseFloat(this.props.peso).toFixed(2)) * tarifa;
       console.log(pesoVolumetrico);
+
       this.setState({
+        ismin:
+          this.getIsMin(
+            this.props.sistema,
+            this.props.tipoenvio,
+            pesoVolumetrico > parseFloat(this.props.peso)
+              ? pesoVolumetrico
+              : parseFloat(this.props.peso)
+          ) && this.props.nombrePais === 'Venezuela',
+        totalnormal: totalnormal,
         total: total,
         pesovolumetrico: pesoVolumetrico,
         subtotal:
           total +
           (this.props.seguro_status
-            ? ((total * this.props.seguro) / 100).toFixed(2)
+            ? ((this.props.precio_producto * this.props.seguro) / 100).toFixed(
+                2
+              )
             : 0) +
           (this.props.otroscargos_status
             ? parseFloat(this.props.otrosCargos)
-            : 0)
+            : 0),
       });
       subtotal = this.setSubTotal(
         total,
@@ -112,9 +178,21 @@ class PriceResult extends Component {
         parseFloat(this.props.largo),
         this.props.sistema
       );
-      total = piescubicos * tarifa;
+      let totalnormal = piescubicos * tarifa;
+      total =
+        this.getIsMin(this.props.sistema, this.props.tipoenvio, piescubicos) &&
+        this.props.nombrePais === 'Venezuela'
+          ? this.getMinTarifa(this.props.ciudadSelect, this.props.tipoenvio)
+          : piescubicos * tarifa;
       this.setState({
-        total: total
+        ismin:
+          this.getIsMin(
+            this.props.sistema,
+            this.props.tipoenvio,
+            piescubicos
+          ) && this.props.nombrePais === 'Venezuela',
+        totalnormal: totalnormal,
+        total: total,
       });
       subtotal = this.setSubTotal(
         total,
@@ -133,7 +211,11 @@ class PriceResult extends Component {
           ? (subtotal * this.props.metodo_pago.percent) / 100
           : this.props.metodo_pago.percent
       );
-      this.setState({ subtotal: subtotal, totalmonto: totalmonto });
+      this.setState({
+        subtotal: subtotal,
+        totalmonto: totalmonto,
+        piescubicos: piescubicos,
+      });
     }
   }
   setSubTotal(a, b, c) {
@@ -222,6 +304,8 @@ class PriceResult extends Component {
   }
   downloadPdf() {
     let data = {
+      ismin: this.state.ismin,
+      totalnormal: this.state.totalnormal,
       montoflete: this.state.total.toFixed(2),
       valorseguro: this.props.seguro,
       impaouesto: 0,
@@ -245,6 +329,8 @@ class PriceResult extends Component {
       ancho: this.props.ancho,
       alto: this.props.alto,
       largo: this.props.largo,
+      piescubicos: this.state.piescubicos,
+      pesolb: this.props.peso,
       peso:
         this.state.pesovolumetrico > this.props.peso
           ? this.state.pesovolumetrico.toFixed(2)
@@ -272,13 +358,13 @@ class PriceResult extends Component {
               100
             : (this.props.precio_producto * this.props.colombiaImpuesto.mayor) /
               100
-          : 0
+          : 0,
     };
-    Provider.DownloadPdf(data).then(res => {
+    Provider.DownloadPdf(data).then((res) => {
       const blob = new Blob([res.data], { type: 'application/pdf' });
       const objectUrl = window.URL.createObjectURL(blob);
       window.open(objectUrl);
-      fileDownload(blob, 'calculoTotalEnvios.pdf');
+      fileDownload(blob, 'resumeTotalEnvios.pdf');
     });
   }
   render() {
@@ -294,15 +380,28 @@ class PriceResult extends Component {
               style={{
                 backgroundColor: 'white',
                 color: 'white',
-                boxShadow: 'none'
+                boxShadow: 'none',
               }}
             >
               <table className='table'>
                 <tbody>
-                  <tr>
-                    <td>Monto flete</td>
-                    <td>${this.state.total.toFixed(2)}</td>
-                  </tr>
+                  {this.state.ismin ? (
+                    <>
+                      <tr>
+                        <td>Monto flete</td>
+                        <td>${this.state.totalnormal.toFixed(2)}</td>
+                      </tr>
+                      <tr>
+                        <td>Total a pagar (Por Mínimo)</td>
+                        <td>${this.state.total.toFixed(2)}</td>
+                      </tr>
+                    </>
+                  ) : (
+                    <tr>
+                      <td>Monto flete</td>
+                      <td>${this.state.total.toFixed(2)}</td>
+                    </tr>
+                  )}
                   {this.props.seguro_status ? (
                     <tr>
                       <td>Seguro ({this.props.seguro}%)</td>
@@ -392,18 +491,27 @@ class PriceResult extends Component {
                           'in x ' +
                           this.props.largo +
                           'in'}
-                    </b>{' '}
+                    </b>
+                    <b>
+                      {this.state.pesovolumetrico > this.props.peso
+                        ? this.props.sistema
+                          ? ' y un peso de ' + this.props.peso + 'kg'
+                          : ' y un peso de ' + this.props.peso + 'lb'
+                        : ''}
+                    </b>
                     {this.props.tipoenvio === 1
-                      ? 'con un peso ' +
+                      ? ', con un peso ' +
                         (this.state.pesovolumetrico > this.props.peso
                           ? 'volumétrico'
                           : '') +
                         ' de ' +
                         (this.state.pesovolumetrico > this.props.peso
-                          ? this.state.pesovolumetrico.toFixed(2)
+                          ? Math.round(this.state.pesovolumetrico.toFixed(2))
                           : this.props.peso) +
                         (this.props.sistema ? 'kg' : 'lb')
-                      : null}
+                      : ', de ' +
+                        this.state.piescubicos.toFixed(2) +
+                        ' pies cúbicos'}
                   </p>
                 </div>
               </div>
@@ -423,7 +531,7 @@ class PriceResult extends Component {
     );
   }
 }
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   ciudadSelect: state.ciudadSelect,
   ancho: state.ancho,
   alto: state.alto,
@@ -442,8 +550,9 @@ const mapStateToProps = state => ({
   email: state.email,
   empresa: state.empresa,
   precio_producto: state.precio_producto,
-  colombiaImpuesto: state.colombiaImpuesto
+  colombiaImpuesto: state.colombiaImpuesto,
+  min: state.min,
 });
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = (dispatch) => ({});
 
 export default connect(mapStateToProps, mapDispatchToProps)(PriceResult);

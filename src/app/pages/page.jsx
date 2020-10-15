@@ -17,15 +17,19 @@ class Pages extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      disabled: false
+      disabled: false,
     };
     this.setDisabled = this.setDisabled.bind(this);
   }
   componentDidMount() {
     this.getSeguro();
+    this.getMin();
   }
   getSeguro() {
-    Provider.GetSeguro().then(res => this.props.setSeguro(res.data[0]));
+    Provider.GetSeguro().then((res) => this.props.setSeguro(res.data[0]));
+  }
+  getMin() {
+    Provider.ListarMinimos().then((res) => this.props.setMin(res.data));
   }
   setDisabled() {
     switch (this.props.page) {
@@ -34,7 +38,8 @@ class Pages extends Component {
         return (
           (this.props.alto || this.props.alto > 0) &&
           (this.props.ancho || this.props.ancho > 0) &&
-          (this.props.largo || this.props.largo > 0)
+          (this.props.largo || this.props.largo > 0) &&
+          (this.props.tipoenvio === 1 ? this.props.peso > 0 : true)
         );
       case 2:
         console.log(this.props);
@@ -117,7 +122,7 @@ class Pages extends Component {
           {this.props.page !== 3 ? (
             <Button
               style={{
-                backgroundColor: !this.setDisabled() ? '#758b92' : '#004e69'
+                backgroundColor: !this.setDisabled() ? '#758b92' : '#004e69',
               }}
               onClick={() =>
                 this.setDisabled()
@@ -136,32 +141,39 @@ class Pages extends Component {
     );
   }
 }
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   page: state.page,
   ancho: state.ancho,
   alto: state.alto,
   largo: state.largo,
-
+  peso: state.peso,
   metodo_pago: state.metodo_pago,
   name: state.name,
   email: state.email,
   precio_producto: state.precio_producto,
-  seguro_status: state.seguro_status
+  seguro_status: state.seguro_status,
+  tipoenvio: state.tipoenvio,
 });
-const mapDispatchToProps = dispatch => ({
+const mapDispatchToProps = (dispatch) => ({
   changePage(page) {
     dispatch({
       type: 'CHANGE_PAGE',
-      page: page
+      page: page,
     });
   },
   setSeguro(seguro) {
     dispatch({
       type: 'SET_SEGURO',
       seguro: seguro.percent,
-      colombiaImpuesto: seguro.bogotaImpuesto
+      colombiaImpuesto: seguro.bogotaImpuesto,
     });
-  }
+  },
+  setMin(min) {
+    dispatch({
+      type: 'SET_MIN',
+      min: min,
+    });
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Pages);

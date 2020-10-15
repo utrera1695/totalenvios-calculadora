@@ -20,7 +20,9 @@ const ListarProductos = async () => {
 const GetSeguro = async () => {
   return await axios.get(api.url + 'seguro')
 }
-
+const ListarMinimos = async () => {
+  return await axios.get(api.url + 'pricemin/all')
+}
 const GetPaymentMethods = async () => {
   return await axios.get(api.url + 'payment/all')
 }
@@ -41,5 +43,6 @@ export default {
   ListarProductos,
   GetSeguro,
   GetPaymentMethods,
-  DownloadPdf
+  DownloadPdf,
+  ListarMinimos
 }

@@ -9,7 +9,7 @@ class Measurements extends Component {
     super(props);
     this.state = {
       productos: [],
-      producto: null
+      producto: null,
     };
   }
   componentDidMount() {
@@ -18,7 +18,7 @@ class Measurements extends Component {
   selectBox(value) {
     this.setState({ producto: value });
     let producto = this.state.productos.filter(
-      a => a.id_box === parseInt(value)
+      (a) => a.id_box === parseInt(value)
     );
     this.props.setValuesBox(
       (this.props.sistema ? producto[0].w * 2.54 : producto[0].w).toFixed(1),
@@ -27,11 +27,12 @@ class Measurements extends Component {
       (this.props.sistema
         ? producto[0].peso_lb / 2.205
         : producto[0].peso_lb
-      ).toFixed(1)
+      ).toFixed(1),
+      value
     );
   }
   getProducts() {
-    Provider.ListarProductos().then(res => {
+    Provider.ListarProductos().then((res) => {
       this.setState({ productos: res.data });
     });
   }
@@ -45,7 +46,7 @@ class Measurements extends Component {
               checked={this.props.sistema}
               onChange={this.props.changeSistema}
               checkedChildren='Decimal'
-              unCheckedChildren='Ingles'
+              unCheckedChildren='Inglés'
             />
             <br />
             <div className='form-group'>
@@ -56,7 +57,7 @@ class Measurements extends Component {
                 style={{ width: '100%' }}
                 placeholder='Busca un articulo pre definido'
                 optionFilterProp='children'
-                value={this.state.producto}
+                value={this.props.producto}
                 onChange={this.selectBox.bind(this)}
                 filterOption={(input, option) =>
                   option.props.children
@@ -64,7 +65,7 @@ class Measurements extends Component {
                     .indexOf(input.toLowerCase()) >= 0
                 }
               >
-                {this.state.productos.map(producto => (
+                {this.state.productos.map((producto) => (
                   <Option key={producto.id_box}>{producto.nombre}</Option>
                 ))}
               </Select>
@@ -73,11 +74,12 @@ class Measurements extends Component {
               <label htmlFor='input_origen'>Dimensiones</label>
               <div className='row'>
                 <div className='col-6 col-sm-4'>
+                  <label style={{ fontWeight: '10px' }}>ANCHO</label>
                   <Input
                     value={this.props.ancho}
                     placeholder='ANCHO'
                     suffix={this.props.sistema ? 'cm' : 'in'}
-                    onChange={e =>
+                    onChange={(e) =>
                       this.props.setValuesBox(
                         e.target.value,
                         this.props.alto,
@@ -90,11 +92,12 @@ class Measurements extends Component {
                   />
                 </div>
                 <div className='col-6 col-sm-4'>
+                  <label style={{ fontWeight: '10px' }}>ALTO</label>
                   <Input
                     value={this.props.alto}
                     placeholder='ALTO'
                     suffix={this.props.sistema ? 'cm' : 'in'}
-                    onChange={e =>
+                    onChange={(e) =>
                       this.props.setValuesBox(
                         this.props.ancho,
                         e.target.value,
@@ -106,11 +109,12 @@ class Measurements extends Component {
                   />
                 </div>
                 <div className='col-6 col-sm-4'>
+                  <label style={{ fontWeight: '10px' }}>LARGO</label>
                   <Input
                     value={this.props.largo}
                     placeholder='LARGO'
                     suffix={this.props.sistema ? 'cm' : 'in'}
-                    onChange={e =>
+                    onChange={(e) =>
                       this.props.setValuesBox(
                         this.props.ancho,
                         this.props.alto,
@@ -121,12 +125,13 @@ class Measurements extends Component {
                     style={{ width: '100%', marginBottom: '1rem' }}
                   />
                 </div>
+
                 <div className='col-6'>
                   <Input
                     value={this.props.peso}
                     placeholder='PESO'
                     suffix={this.props.sistema ? 'kg' : 'lb'}
-                    onChange={e =>
+                    onChange={(e) =>
                       this.props.setValuesBox(
                         this.props.ancho,
                         this.props.alto,
@@ -145,30 +150,32 @@ class Measurements extends Component {
     );
   }
 }
-const mapStateToProps = state => ({
+const mapStateToProps = (state) => ({
   origen: state.origen,
   ancho: state.ancho,
   alto: state.alto,
   largo: state.largo,
   peso: state.peso,
-  sistema: state.sistema
+  sistema: state.sistema,
+  producto: state.producto,
 });
-const mapDispatchToProps = dispatch => ({
-  setValuesBox(ancho, alto, largo, peso) {
+const mapDispatchToProps = (dispatch) => ({
+  setValuesBox(ancho, alto, largo, peso, producto) {
     dispatch({
       type: 'SET_BOX',
       ancho,
       alto,
       largo,
-      peso
+      peso,
+      producto,
     });
   },
   changeSistema(value) {
     dispatch({
       type: 'CHANGE_SISTEMA',
-      sistema: value
+      sistema: value,
     });
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Measurements);
