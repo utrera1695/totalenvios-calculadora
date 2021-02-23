@@ -34,7 +34,6 @@ class Pages extends Component {
   setDisabled() {
     switch (this.props.page) {
       case 1:
-        console.log(this.props);
         return (
           (this.props.alto || this.props.alto > 0) &&
           (this.props.ancho || this.props.ancho > 0) &&
@@ -42,7 +41,6 @@ class Pages extends Component {
           (this.props.tipoenvio === 1 ? this.props.peso > 0 : true)
         );
       case 2:
-        console.log(this.props);
         let regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return (
           this.props.nombre !== '' &&

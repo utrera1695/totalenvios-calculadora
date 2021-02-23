@@ -208,6 +208,15 @@ table td {
   margin-bottom: 0;
 }
 
+.ant-select {
+  background-color: white !important;
+  border: 1px solid #f1f1f1 !important;
+}
+
+.ant-input-affix-wrapper {
+  background-color: #f1f1f1 !important;
+  border: none !important;
+}
 @media (max-width: 575.98px) {
   .btns_next_prev {
     position: static;

@@ -27,26 +27,24 @@ class PriceResult extends Component {
   }
   calcularPesoVolumetrico(ancho, alto, largo, sistema) {
     if (!sistema) {
-      /* ingles in3/lb */
-      console.log(ancho, alto, largo);
+      /* ingles */
+      console.log('Peso volumetrico',ancho * alto * largo);
       return (ancho * alto * largo) / 166;
     } else {
-      /* decimal 
-      2659.06 m3/kg
-      */
-      console.log(ancho, alto, largo);
-      return (ancho * alto * largo) / 2659.06;
+      /* decimal */
+      console.log('Peso volumetrico', (ancho / 2.54) * (alto / 2.54) * (largo / 2.54));
+      return ((ancho / 2.54) * (alto / 2.54) * (largo / 2.54)) / 166;
     }
   }
   calcularPiesCubicos(ancho, alto, largo, sistema) {
     if (!sistema) {
       /* ingles pie3*/
-      console.log(ancho, alto, largo);
+      console.log('Pies cubicos',ancho * alto * largo);
       return (ancho * alto * largo) / 1728;
     } else {
-      /* decimal cm3*/
-      console.log(ancho, alto, largo);
-      return (ancho * alto * largo) / 28316.85;
+      /* decimal */
+      console.log('Pies cubicos',(ancho / 2.54) * (alto / 2.54) * (largo / 2.54));
+      return ((ancho / 2.54) * (alto / 2.54) * (largo / 2.54)) / 1728;
     }
   }
   getTarifa(ciudad, tipoenvio, origen) {
@@ -75,24 +73,18 @@ class PriceResult extends Component {
     if (tipoenvio === 1) {
       /* AEREO */
       let min = this.props.min.filter((a) => a.type === 1);
-      if (!sistema) {
-        /* ingles */
-        return medida <= min[0].lbmin;
-      } else {
-        /* decimal */
-        return medida <= min[0].lbmin / 2.205;
-      }
+      return medida <= min[0].lbmin;
     } else {
       /* MARITIMO */
       let min = this.props.min.filter((a) => a.type === 2);
-      if (!sistema) {
-        /* ingles */
-        return medida <= min[0].lbmin;
-      } else {
-        /* decimal */
-        return medida <= min[0].lbmin * 28317;
-      }
+      return medida <= min[0].lbmin;
     }
+  }
+  pesoInLb(sistema, peso) {
+    if (sistema) {
+      return peso * 2.205;
+    }
+    return peso;
   }
   calcularcosto() {
     var total = 0;
@@ -103,42 +95,42 @@ class PriceResult extends Component {
     );
     var subtotal = 0;
     var totalmonto = 0;
+    const pesoLb = this.pesoInLb(this.props.sistema, this.props.peso)
+    console.log('pesoLb', pesoLb)
     /* si el envio es aereo */
     if (this.props.tipoenvio === 1) {
+      /* se calcula el peso volumetrico */
       let pesoVolumetrico = this.calcularPesoVolumetrico(
         parseFloat(this.props.ancho),
         parseFloat(this.props.alto),
         parseFloat(this.props.largo),
         this.props.sistema
       );
+      /* se calcula el total normal */
       let totalnormal =
-        pesoVolumetrico > parseFloat(this.props.peso)
+        pesoVolumetrico > parseFloat(pesoLb)
           ? Math.round(pesoVolumetrico.toFixed(2)) * tarifa
-          : Math.round(parseFloat(this.props.peso).toFixed(2)) * tarifa;
-
-      total =
-        this.getIsMin(
+          : Math.round(parseFloat(pesoLb).toFixed(2)) * tarifa;
+      console.log('total normal', totalnormal);
+      /* se veifica si se aplica el minimo*/
+      let isMin = this.getIsMin(
           this.props.sistema,
           this.props.tipoenvio,
-          pesoVolumetrico > parseFloat(this.props.peso)
-            ? pesoVolumetrico
-            : parseFloat(this.props.peso)
-        ) && this.props.nombrePais === 'Venezuela'
+          pesoVolumetrico > parseFloat(pesoLb)
+              ? pesoVolumetrico
+              : parseFloat(pesoLb)
+      )
+      console.log('es minimo', isMin )
+      /* se saca el total */
+      total =
+        isMin && this.props.nombrePais === 'Venezuela'
           ? this.getMinTarifa(this.props.ciudadSelect, this.props.tipoenvio)
-          : pesoVolumetrico > parseFloat(this.props.peso)
-          ? Math.round(pesoVolumetrico.toFixed(2)) * tarifa
-          : Math.round(parseFloat(this.props.peso).toFixed(2)) * tarifa;
-      console.log(pesoVolumetrico);
+          :totalnormal;
+      console.log('total', total)
+      console.log('peso volumetrico', pesoVolumetrico);
 
       this.setState({
-        ismin:
-          this.getIsMin(
-            this.props.sistema,
-            this.props.tipoenvio,
-            pesoVolumetrico > parseFloat(this.props.peso)
-              ? pesoVolumetrico
-              : parseFloat(this.props.peso)
-          ) && this.props.nombrePais === 'Venezuela',
+        ismin: isMin && this.props.nombrePais === 'Venezuela',
         totalnormal: totalnormal,
         total: total,
         pesovolumetrico: pesoVolumetrico,
@@ -172,6 +164,7 @@ class PriceResult extends Component {
       );
       this.setState({ subtotal: subtotal, totalmonto: totalmonto });
     } else {
+      /* se calculan los pies cubicos */
       let piescubicos = this.calcularPiesCubicos(
         parseFloat(this.props.ancho),
         parseFloat(this.props.alto),
@@ -179,18 +172,13 @@ class PriceResult extends Component {
         this.props.sistema
       );
       let totalnormal = piescubicos * tarifa;
+      let isMin = this.getIsMin(this.props.sistema, this.props.tipoenvio, piescubicos)
       total =
-        this.getIsMin(this.props.sistema, this.props.tipoenvio, piescubicos) &&
-        this.props.nombrePais === 'Venezuela'
+        isMin && this.props.nombrePais === 'Venezuela'
           ? this.getMinTarifa(this.props.ciudadSelect, this.props.tipoenvio)
-          : piescubicos * tarifa;
+          : totalnormal;
       this.setState({
-        ismin:
-          this.getIsMin(
-            this.props.sistema,
-            this.props.tipoenvio,
-            piescubicos
-          ) && this.props.nombrePais === 'Venezuela',
+        ismin: isMin && this.props.nombrePais === 'Venezuela',
         totalnormal: totalnormal,
         total: total,
       });
