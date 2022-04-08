@@ -93,6 +93,8 @@ class PriceResult extends Component {
       this.props.tipoenvio,
       this.props.origen
     );
+    console.log('Tarifa',tarifa)
+    console.log('Tipo de envio',this.props.tipoenvio)
     var subtotal = 0;
     var totalmonto = 0;
     const pesoLb = this.pesoInLb(this.props.sistema, this.props.peso)
@@ -171,7 +173,9 @@ class PriceResult extends Component {
         parseFloat(this.props.largo),
         this.props.sistema
       );
+      /* se saca el total */
       let totalnormal = piescubicos * tarifa;
+      /* se verifica si es minimo */
       let isMin = this.getIsMin(this.props.sistema, this.props.tipoenvio, piescubicos)
       total =
         isMin && this.props.nombrePais === 'Venezuela'
@@ -182,6 +186,7 @@ class PriceResult extends Component {
         totalnormal: totalnormal,
         total: total,
       });
+      /* se calcula el subtotal */
       subtotal = this.setSubTotal(
         total,
         this.props.seguro_status
@@ -481,21 +486,13 @@ class PriceResult extends Component {
                           'in'}
                     </b>
                     <b>
-                      {this.state.pesovolumetrico > this.props.peso
-                        ? this.props.sistema
+                      {this.props.sistema
                           ? ' y un peso de ' + this.props.peso + 'kg'
                           : ' y un peso de ' + this.props.peso + 'lb'
-                        : ''}
-                    </b>
+                      }</b>
                     {this.props.tipoenvio === 1
-                      ? ', con un peso ' +
-                        (this.state.pesovolumetrico > this.props.peso
-                          ? 'volumétrico'
-                          : '') +
-                        ' de ' +
-                        (this.state.pesovolumetrico > this.props.peso
-                          ? Math.round(this.state.pesovolumetrico.toFixed(2))
-                          : this.props.peso) +
+                      ? ', con un peso volumétrico de ' +
+                        (Math.round(this.props.sistema ? (this.state.pesovolumetrico/2.205).toFixed(2):this.state.pesovolumetrico.toFixed(2))) +
                         (this.props.sistema ? 'kg' : 'lb')
                       : ', de ' +
                         this.state.piescubicos.toFixed(2) +

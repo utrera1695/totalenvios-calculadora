@@ -87,7 +87,7 @@ class Destino extends Component {
                     .indexOf(input.toLowerCase()) >= 0
                 }
               >
-                {this.state.origenes.map(origen => (
+                {this.state.origenes.filter(a=> a.nombreSucursal === 'Miami').map(origen => (
                   <Option key={origen.id_origen}>
                     {origen.nombreSucursal}
                   </Option>
@@ -111,7 +111,7 @@ class Destino extends Component {
                     .indexOf(input.toLowerCase()) >= 0
                 }
               >
-                {this.state.paises.map(pais =>
+                {this.state.paises.filter(a=> a.nombrePais === 'Venezuela').map(pais =>
                   pais.nombrePais === 'Colombia' &&
                   this.props.tipoenvio !== 1 ? null : (
                     <Option key={pais.id_pais}>{pais.nombrePais}</Option>
