@@ -1,6 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ### change url api in `src/providers/api` to connect to apiRest
+### build project, upload to the server directory to be able to insert in the main web
 
 ## Available Scripts
 
