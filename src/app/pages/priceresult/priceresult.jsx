@@ -28,22 +28,23 @@ class PriceResult extends Component {
   calcularPesoVolumetrico(ancho, alto, largo, sistema) {
     if (!sistema) {
       /* ingles */
-      console.log('Peso volumetrico',ancho * alto * largo);
+      console.log('Peso volumetrico ingles',(ancho * alto * largo) / 166);
       return (ancho * alto * largo) / 166;
     } else {
       /* decimal */
-      console.log('Peso volumetrico', (ancho / 2.54) * (alto / 2.54) * (largo / 2.54));
+      console.log('Peso volumetrico decimal', ((ancho / 2.54) * (alto / 2.54) * (largo / 2.54)) / 166);
       return ((ancho / 2.54) * (alto / 2.54) * (largo / 2.54)) / 166;
     }
   }
   calcularPiesCubicos(ancho, alto, largo, sistema) {
+    
     if (!sistema) {
       /* ingles pie3*/
-      console.log('Pies cubicos',ancho * alto * largo);
+      console.log('Pies cubicos ingles ',(ancho * alto * largo) / 1728);
       return (ancho * alto * largo) / 1728;
     } else {
       /* decimal */
-      console.log('Pies cubicos',(ancho / 2.54) * (alto / 2.54) * (largo / 2.54));
+      console.log('Pies cubicos decimal',((ancho / 2.54) * (alto / 2.54) * (largo / 2.54)) / 1728 );
       return ((ancho / 2.54) * (alto / 2.54) * (largo / 2.54)) / 1728;
     }
   }
@@ -82,6 +83,7 @@ class PriceResult extends Component {
   }
   pesoInLb(sistema, peso) {
     if (sistema) {
+      /* kg a lb */
       return peso * 2.205;
     }
     return peso;
@@ -324,10 +326,7 @@ class PriceResult extends Component {
       largo: this.props.largo,
       piescubicos: this.state.piescubicos,
       pesolb: this.props.peso,
-      peso:
-        this.state.pesovolumetrico > this.props.peso
-          ? this.state.pesovolumetrico.toFixed(2)
-          : this.props.peso,
+      peso: this.state.pesovolumetrico,
       tipopeso:
         this.state.pesovolumetrico > this.props.peso ? 'volumétrico' : '',
       tipoenvio: this.props.tipoenvio,
